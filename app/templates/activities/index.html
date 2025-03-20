@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Activities - Friedrich 2025{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-white">Activities Dashboard</h1>
+    <div>
+        <a href="{{ url_for('main.dashboard') }}" class="inline-block bg-gray-700 hover:bg-gray-600 text-white text-sm font-bold py-2 px-4 rounded">
+            Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 mb-8">
+    <div class="bg-blue-600 text-white px-4 py-3">
+        <h2 class="font-bold">Your Team: {{ team.team_name }}</h2>
+        <p class="text-sm">Current Points: {{ team.total_points }}</p>
+    </div>
+    <div class="p-4">
+        <p class="text-gray-300 mb-4">
+            Participate in activities to earn points for your team. First, second, and third place finishers earn bonus points!
+        </p>
+    </div>
+</div>
+
+<div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+    <div class="bg-gray-700 text-white px-4 py-3 flex justify-between items-center">
+        <h2 class="font-bold">Available Activities</h2>
+        <span class="text-sm bg-blue-500 px-2 py-1 rounded">{{ activities|length }} Activities</span>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-700">
+            <thead>
+                <tr class="bg-gray-900">
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        Activity
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        Date & Location
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        Points
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        Status
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-gray-800 divide-y divide-gray-700">
+                {% for activity in activities %}
+                <tr class="hover:bg-gray-700">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-white">
+                                    {{ activity.name }}
+                                </div>
+                                <div class="text-sm text-gray-400">
+                                    {{ activity.category }}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-white">
+                            {% if activity.scheduled_at %}
+                                {{ activity.scheduled_at.strftime('%b %d, %Y') }}
+                                <div class="text-sm text-gray-400">
+                                    {{ activity.scheduled_at.strftime('%I:%M %p') }}
+                                </div>
+                            {% else %}
+                                Anytime
+                            {% endif %}
+                        </div>
+                        <div class="text-sm text-gray-400">
+                            {{ activity.location or 'Location TBA' }}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-white">
+                            Base: {{ activity.participation_points }}
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            1st: +{{ activity.first_place_points }} •
+                            2nd: +{{ activity.second_place_points }} •
+                            3rd: +{{ activity.third_place_points }}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {% if activity.activity_id in participation %}
+                            {% set team_activity = participation[activity.activity_id] %}
+                            {% if team_activity.verified %}
+                                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-900 text-green-300">
+                                    Completed & Verified
+                                </span>
+                            {% else %}
+                                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-900 text-yellow-300">
+                                    Pending Verification
+                                </span>
+                            {% endif %}
+                        {% else %}
+                            {% if activity.scheduled_at and activity.scheduled_at > now %}
+                                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-900 text-blue-300">
+                                    Upcoming
+                                </span>
+                            {% else %}
+                                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-600 text-gray-300">
+                                    Available
+                                </span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <a href="{{ url_for('activities.show', activity_id=activity.activity_id) }}" class="text-blue-500 hover:text-blue-400">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not activities %}
+                <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-400">
+                        No activities available at this time.
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

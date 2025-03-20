@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ activity.name }} - Friedrich 2025{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-white">{{ activity.name }}</h1>
+    <div>
+        <a href="{{ url_for('activities.index') }}" class="inline-block bg-gray-700 hover:bg-gray-600 text-white text-sm font-bold py-2 px-4 rounded">
+            Back to Activities
+        </a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+        <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 mb-6">
+            <div class="bg-blue-600 text-white px-4 py-3">
+                <h2 class="font-bold">Activity Details</h2>
+            </div>
+            <div class="p-6">
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-white mb-2">Description</h3>
+                    <p class="text-gray-300">{{ activity.description or 'No description available.' }}</p>
+                </div>
+
+                {% if activity.rules %}
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-white mb-2">Rules</h3>
+                    <p class="text-gray-300">{{ activity.rules }}</p>
+                </div>
+                {% endif %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Date & Time</h3>
+                        <p class="text-gray-300">
+                            {% if activity.scheduled_at %}
+                                {{ activity.scheduled_at.strftime('%A, %B %d, %Y') }}
+                                <br>
+                                {{ activity.scheduled_at.strftime('%I:%M %p') }}
+                            {% else %}
+                                No specific date/time
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Location</h3>
+                        <p class="text-gray-300">{{ activity.location or 'Location TBA' }}</p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-white mb-2">Duration</h3>
+                    <p class="text-gray-300">
+                        {% if activity.duration_minutes %}
+                            {{ activity.duration_minutes // 60 }}h {% if activity.duration_minutes % 60 %}{{ activity.duration_minutes % 60 }}m{% endif %}
+                        {% else %}
+                            Duration not specified
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Points</h3>
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="text-center">
+                                <div class="text-gray-400 text-sm">Participation</div>
+                                <div class="text-white text-xl font-bold">{{ activity.participation_points }}</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-gray-400 text-sm">1st Place</div>
+                                <div class="text-white text-xl font-bold">+{{ activity.first_place_points }}</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-gray-400 text-sm">2nd Place</div>
+                                <div class="text-white text-xl font-bold">+{{ activity.second_place_points }}</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-gray-400 text-sm">3rd Place</div>
+                                <div class="text-white text-xl font-bold">+{{ activity.third_place_points }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lg:col-span-1">
+        <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 sticky top-4">
+            <div class="bg-blue-600 text-white px-4 py-3">
+                <h2 class="font-bold">Participation</h2>
+            </div>
+            <div class="p-6">
+                {% if team_activity %}
+                    <div class="mb-4 p-4 bg-gray-700 rounded-lg">
+                        <h3 class="text-lg font-semibold text-white mb-2">Your Results</h3>
+                        <div class="mb-2">
+                            <span class="text-gray-400">Completed:</span>
+                            <span class="text-white">{{ team_activity.completed_at.strftime('%b %d, %Y') }}</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-gray-400">Placement:</span>
+                            <span class="text-white">
+                                {% if team_activity.placement == 1 %}
+                                    🥇 1st Place
+                                {% elif team_activity.placement == 2 %}
+                                    🥈 2nd Place
+                                {% elif team_activity.placement == 3 %}
+                                    🥉 3rd Place
+                                {% elif team_activity.placement %}
+                                    {{ team_activity.placement }}th Place
+                                {% else %}
+                                    Participated
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-gray-400">Points Earned:</span>
+                            <span class="text-white font-bold">{{ team_activity.points_earned }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400">Status:</span>
+                            {% if team_activity.verified %}
+                                <span class="text-green-400">Verified ✓</span>
+                            {% else %}
+                                <span class="text-yellow-400">Pending Verification</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm text-center">Your team has already recorded participation in this activity.</p>
+                {% else %}
+                    <form action="{{ url_for('activities.participate', activity_id=activity.activity_id) }}" method="POST" class="space-y-4">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div>
+                            <label for="placement" class="block text-gray-300 text-sm font-bold mb-2">Your Placement (optional)</label>
+                            <select id="placement" name="placement" class="shadow appearance-none border border-gray-600 bg-gray-700 rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500">
+                                <option value="">-- Select Placement --</option>
+                                <option value="1">1st Place</option>
+                                <option value="2">2nd Place</option>
+                                <option value="3">3rd Place</option>
+                                <option value="4">4th Place</option>
+                                <option value="5">5th Place or lower</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm mb-4">
+                                By submitting this form, you confirm that your team participated in this activity.
+                                An administrator will verify your participation.
+                            </p>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                Record Participation
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Photo{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+            <div class="bg-blue-600 text-white px-4 py-2">
+                <h2 class="font-bold text-xl">Upload Photo for Contest</h2>
+            </div>
+
+            <div class="p-6">
+                <h3 class="font-bold text-white text-lg mb-2">This Week's Theme: {{ theme }}</h3>
+                <p class="text-gray-300 mb-6">Deadline: {{ deadline }}</p>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="mb-4 p-4 rounded {% if category == 'error' %}bg-red-800 text-white{% else %}bg-green-700 text-white{% endif %}">
+                        {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                <form action="{{ url_for('photos.upload_photo') }}" method="post" enctype="multipart/form-data" class="space-y-6">
+                    <div>
+                        <label for="photo" class="block text-sm font-medium text-gray-300 mb-2">Choose Photo</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-700 border-dashed rounded-md">
+                            <div class="space-y-1 text-center">
+                                <svg id="preview-placeholder" class="mx-auto h-12 w-12 text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <img id="preview-image" class="mx-auto h-32 hidden object-cover rounded" src="" alt="Preview">
+                                <div class="flex text-sm text-gray-400">
+                                    <label for="photo" class="relative cursor-pointer bg-gray-700 rounded-md font-medium text-blue-400 hover:text-blue-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 p-2">
+                                        <span>Upload a file</span>
+                                        <input id="photo" name="photo" type="file" class="sr-only" accept=".jpg,.jpeg,.png,.gif" onchange="previewImage()">
+                                    </label>
+                                    <p class="pl-1 pt-2">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">
+                                    PNG, JPG, GIF up to 10MB
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="caption" class="block text-sm font-medium text-gray-300 mb-2">Caption</label>
+                        <input type="text" name="caption" id="caption" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-700 bg-gray-700 text-white rounded-md p-2">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <a href="{{ url_for('dashboard') }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            Cancel
+                        </a>
+                        <button type="submit" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Upload Photo
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function previewImage() {
+    const preview = document.getElementById('preview-image');
+    const placeholder = document.getElementById('preview-placeholder');
+    const file = document.querySelector('input[type=file]').files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = function () {
+        preview.src = reader.result;
+        preview.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+    }
+
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = "";
+        preview.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+    }
+}
+</script>
+{% endblock %}
