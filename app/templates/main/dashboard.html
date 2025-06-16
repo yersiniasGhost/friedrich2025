@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Friedrich 2025{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-white mb-6">{{team.team_name}} Dashboard</h1>
+<p class="text-lg text-gray-300 mb-8">Welcome to your team dashboard, {{ current_user.member_name }}!</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+        <div class="bg-blue-600 text-white px-4 py-2">
+            <h2 class="font-bold">Your Team</h2>
+        </div>
+        <div class="p-4 text-gray-300">
+            <div class="flex items-center mb-4">
+                <div class="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mr-4">
+                    {% if team %}
+                        <span class="text-2xl font-bold text-blue-400">{{ team.team_name[:2].upper() }}</span>
+                    {% else %}
+                        <span class="text-2xl font-bold text-blue-400">TN</span>
+                    {% endif %}
+                </div>
+                <div>
+                    {% if team %}
+                        <h3 class="text-xl font-bold text-white">{{ team.team_name }}</h3>
+                        <p class="text-gray-400">
+                            {% if team.members.all() %}
+                                Members: {{ team.members.all()|map(attribute='member_name')|join(', ') }}
+                            {% else %}
+                                Members: You
+                            {% endif %}
+                        </p>
+                    {% else %}
+                        <h3 class="text-xl font-bold text-white">No Team Assigned</h3>
+                        <p class="text-gray-400">Contact an admin to be assigned to a team</p>
+                    {% endif %}
+                </div>
+                <div class="ml-auto">
+                    {% if team %}
+                        <span class="text-2xl font-bold text-blue-400">{{ team.total_points }}</span>
+                    {% else %}
+                        <span class="text-2xl font-bold text-blue-400">0</span>
+                    {% endif %}
+                    <p class="text-gray-400 text-right">points</p>
+                </div>
+            </div>
+            {% if team and team.description %}
+                <div class="mt-2 p-3 bg-gray-700 rounded-lg">
+                    <p class="text-gray-300">{{ team.description }}</p>
+                </div>
+            {% endif %}
+            <div class="mt-4">
+                <a href="#" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">Team Profile</a>
+            </div>
+        </div>
+    </div>
+    <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+        <div class="bg-blue-600 text-white px-4 py-2">
+            <h2 class="font-bold">Upcoming Activities</h2>
+        </div>
+        <div class="p-4">
+            <div class="mb-3 pb-3 border-b border-gray-700">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-white">Volleyball Tournament</h3>
+                    <span class="text-sm text-gray-400">Mar 15</span>
+                </div>
+                <p class="text-gray-300 text-sm">Main Beach, 2:00 PM</p>
+            </div>
+            <div class="mb-3 pb-3 border-b border-gray-700">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-white">Trivia Night</h3>
+                    <span class="text-sm text-gray-400">Mar 18</span>
+                </div>
+                <p class="text-gray-300 text-sm">Event Hall, 7:00 PM</p>
+            </div>
+            <div>
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-white">Hiking Challenge</h3>
+                    <span class="text-sm text-gray-400">Mar 22</span>
+                </div>
+                <p class="text-gray-300 text-sm">Mountain Trail, 10:00 AM</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+        <div class="bg-blue-600 text-white px-4 py-2">
+            <h2 class="font-bold">Recent Results</h2>
+        </div>
+        <div class="p-4">
+            <div class="mb-3 pb-3 border-b border-gray-700">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-white">Volleyball Tournament</h3>
+                    <span class="text-sm text-blue-400">+75 points</span>
+                </div>
+                <p class="text-gray-300 text-sm">3rd Place</p>
+            </div>
+            <div>
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-white">Hiking Challenge</h3>
+                    <span class="text-sm text-blue-400">+150 points</span>
+                </div>
+                <p class="text-gray-300 text-sm">1st Place</p>
+            </div>
+            <div class="mt-4">
+                <a href="{{ url_for('main.leaderboard') }}" class="text-blue-400 hover:text-blue-300">View Leaderboard →</a>
+            </div>
+        </div>
+    </div>
+   <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+    <div class="bg-blue-600 text-white px-4 py-2 flex justify-between items-center">
+        <h2 class="font-bold">Photo Contest</h2>
+        <a href="{{ url_for('photos.gallery') }}" class="text-sm text-blue-200 hover:text-white">View All</a>
+    </div>
+    <div class="p-4">
+        <h3 class="font-bold text-white mb-2">This Week's Theme: Nature</h3>
+        <p class="text-gray-300 text-sm mb-4">Upload your best nature photos by Friday at 5:00 PM. You have {{ votes_remaining }} votes remaining this week.</p>
+
+        <div class="flex space-x-4 mb-4 overflow-x-auto pb-2">
+            {% if recent_photos %}
+                {% for photo in recent_photos %}
+                <div class="min-w-[6rem] w-24 h-24 bg-gray-700 rounded flex items-center justify-center overflow-hidden relative group">
+                   <img src="{{ url_for('uploaded_file', filename=photo.file_path) }}" alt="{{ photo.caption }}" class="object-cover w-full h-full">
+                    {% if not user_has_voted_for(photo.photo_id) and photo.team_id != current_user.team_id %}
+                    <div class="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <form action="{{ url_for('photos.vote', photo_id=photo.photo_id) }}" method="post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" {% if votes_remaining <= 0 %}disabled{% endif %} class="bg-pink-600 hover:bg-pink-700 disabled:bg-gray-600 text-white text-xs font-bold py-1 px-2 rounded">
+                                Vote
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="w-24 h-24 bg-gray-700 rounded flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            {% endif %}
+
+            <a href="{{ url_for('photos.upload_photo') }}" class="w-24 h-24 bg-gray-900 border-2 border-dashed border-gray-700 rounded flex flex-col items-center justify-center hover:bg-gray-800 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span class="text-gray-500 text-xs mt-1">Add Photo</span>
+            </a>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ url_for('photos.upload_photo') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">Upload Photo</a>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

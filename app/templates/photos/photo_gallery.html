@@ -14,7 +14,7 @@
 
         <div class="p-6">
             <h3 class="font-bold text-white text-lg mb-2">Current Theme: Nature</h3>
-            <p class="text-gray-300 mb-6">Vote for your favorite photos! You have {{ votes_remaining }} votes remaining this week.</p>
+            <p class="text-gray-300 mb-6">Vote for your favorite photos! You have {{ votes_remaining }} votes remaining.</p>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
@@ -31,7 +31,7 @@
                     {% for item in gallery_items %}
                     <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg border border-gray-700">
                         <div class="aspect-w-16 aspect-h-12">
-                            <img src="{{ url_for('static', filename=item.photo.file_path) }}" alt="{{ item.photo.caption }}" class="object-cover w-full h-full">
+                            <img src="{{ url_for('uploaded_file', filename=item.photo.file_path) }}" alt="{{ item.photo.caption }}" class="object-cover w-full h-full">
                         </div>
                         <div class="p-4">
                             <div class="flex items-center justify-between mb-2">
@@ -51,11 +51,12 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                                     </svg>
-                                    <span>{{ item.photo.votes|length }} votes</span>
+                                    <span>{{ item.vote_count }} votes</span>
                                 </div>
 
                                 {% if not user_has_voted_for(item.photo.photo_id) %}
                                 <form action="{{ url_for('photos.vote', photo_id=item.photo.photo_id) }}" method="post" class="inline">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token is defined else '' }}">
                                     <button type="submit" {% if votes_remaining <= 0 %}disabled{% endif %} class="inline-block bg-pink-600 hover:bg-pink-700 disabled:bg-gray-600 text-white text-sm font-bold py-1 px-4 rounded">
                                         Vote
                                     </button>

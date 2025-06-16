@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - Friedrich 2025{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-white mb-6">Admin Dashboard</h1>
+<p class="text-lg text-gray-300 mb-8">Welcome to the admin dashboard, {{ current_user.member_name }}!</p>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+        <div class="bg-blue-600 text-white px-4 py-3">
+            <h2 class="font-bold">Manage Teams</h2>
+        </div>
+        <div class="p-4">
+            <p class="text-gray-300 mb-4">Create, edit, and manage team registrations.</p>
+            <div class="flex justify-between items-center text-sm text-gray-400 mb-2">
+                <span>Total Teams</span>
+                <span>12</span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                <div class="bg-blue-500 h-2 rounded-full" style="width: 75%"></div>
+            </div>
+            <a href="#" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Manage Teams</a>
+        </div>
+    </div>
+    <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+        <div class="bg-green-600 text-white px-4 py-3">
+            <h2 class="font-bold">Manage Activities</h2>
+        </div>
+        <div class="p-4">
+            <p class="text-gray-300 mb-4">Create, schedule, and manage activities and events.</p>
+            <div class="flex justify-between items-center text-sm text-gray-400 mb-2">
+                <span>Scheduled Activities</span>
+                <span>8</span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                <div class="bg-green-500 h-2 rounded-full" style="width: 60%"></div>
+            </div>
+            <a href="#" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Manage Activities</a>
+        </div>
+    </div>
+    <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+        <div class="bg-red-600 text-white px-4 py-3">
+            <h2 class="font-bold">Manage Photos</h2>
+        </div>
+        <div class="p-4">
+            <p class="text-gray-300 mb-4">Review, moderate, and manage photo contest submissions.</p>
+            <div class="flex justify-between items-center text-sm text-gray-400 mb-2">
+                <span>Pending Review</span>
+                <span>5</span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                <div class="bg-red-500 h-2 rounded-full" style="width: 40%"></div>
+            </div>
+            <a href="#" class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Manage Photos</a>
+        </div>
+    </div>
+</div>
+
+<div class="mt-8 bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+    <div class="bg-gray-700 text-white px-4 py-3">
+        <h2 class="font-bold">System Status</h2>
+    </div>
+    <div class="p-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-gray-700 p-4 rounded">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-gray-300">Server Status</span>
+                    <span class="text-green-400">Online</span>
+                </div>
+                <div class="w-full bg-gray-800 rounded-full h-2 mb-4">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="bg-gray-700 p-4 rounded">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-gray-300">Database</span>
+                    <span class="text-green-400">Connected</span>
+                </div>
+                <div class="w-full bg-gray-800 rounded-full h-2 mb-4">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="bg-gray-700 p-4 rounded">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-gray-300">Storage</span>
+                    <span class="text-yellow-400">75%</span>
+                </div>
+                <div class="w-full bg-gray-800 rounded-full h-2 mb-4">
+                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 75%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

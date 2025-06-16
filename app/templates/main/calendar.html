@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Calendar - Friedrich 2025{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-white mb-6">Activity Calendar</h1>
+
+<div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 mb-8">
+    <div class="bg-gray-700 text-white px-4 py-3 flex justify-between items-center">
+        <button class="text-gray-300 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <h2 class="font-bold text-xl">March 2025</h2>
+        <button class="text-gray-300 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+    </div>
+    <div class="p-4">
+        <div class="grid grid-cols-7 gap-2 text-center text-sm font-semibold mb-2">
+            <div class="text-gray-400">Sun</div>
+            <div class="text-gray-400">Mon</div>
+            <div class="text-gray-400">Tue</div>
+            <div class="text-gray-400">Wed</div>
+            <div class="text-gray-400">Thu</div>
+            <div class="text-gray-400">Fri</div>
+            <div class="text-gray-400">Sat</div>
+        </div>
+        <div class="grid grid-cols-7 gap-2 text-center">
+            <!-- Week 1 -->
+            <div class="p-2 text-gray-500">23</div>
+            <div class="p-2 text-gray-500">24</div>
+            <div class="p-2 text-gray-500">25</div>
+            <div class="p-2 text-gray-500">26</div>
+            <div class="p-2 text-gray-500">27</div>
+            <div class="p-2 text-gray-500">28</div>
+            <div class="p-2 text-white">1</div>
+            <!-- Week 2 -->
+            <div class="p-2 text-white">2</div>
+            <div class="p-2 text-white">3</div>
+            <div class="p-2 text-white">4</div>
+            <div class="p-2 text-white">5</div>
+            <div class="p-2 text-white">6</div>
+            <div class="p-2 text-white">7</div>
+            <div class="p-2 text-white">8</div>
+            <!-- Week 3 -->
+            <div class="p-2 text-white">9</div>
+            <div class="p-2 text-white">10</div>
+            <div class="p-2 text-white">11</div>
+            <div class="p-2 text-white">12</div>
+            <div class="p-2 text-white">13</div>
+            <div class="p-2 text-white">14</div>
+            <div class="p-2 bg-blue-600 text-white rounded">15</div>
+            <!-- Week 4 -->
+            <div class="p-2 text-white">16</div>
+            <div class="p-2 text-white">17</div>
+            <div class="p-2 bg-red-600 text-white rounded">18</div>
+            <div class="p-2 text-white">19</div>
+            <div class="p-2 text-white">20</div>
+            <div class="p-2 text-white">21</div>
+            <div class="p-2 bg-green-600 text-white rounded">22</div>
+            <!-- Week 5 -->
+            <div class="p-2 text-white">23</div>
+            <div class="p-2 text-white">24</div>
+            <div class="p-2 text-white">25</div>
+            <div class="p-2 text-white">26</div>
+            <div class="p-2 text-white">27</div>
+            <div class="p-2 text-white">28</div>
+            <div class="p-2 text-white">29</div>
+            <!-- Week 6 -->
+            <div class="p-2 text-white">30</div>
+            <div class="p-2 text-white">31</div>
+            <div class="p-2 text-gray-500">1</div>
+            <div class="p-2 text-gray-500">2</div>
+            <div class="p-2 text-gray-500">3</div>
+            <div class="p-2 text-gray-500">4</div>
+            <div class="p-2 text-gray-500">5</div>
+        </div>
+    </div>
+</div>
+
+<h2 class="text-2xl font-bold text-white mb-4">Upcoming Activities</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+        <div class="bg-blue-600 text-white px-4 py-3">
+            <h3 class="font-bold">Volleyball Tournament</h3>
+            <p class="text-sm">March 15, 2025 - 2:00 PM</p>
+        </div>
+        <div class="p-4">
+            <p class="text-gray-300 mb-3">Join us for the volleyball tournament at the beach. Teams will compete in a round-robin format.</p>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Location: Main Beach</span>
+                <span class="text-blue-400">10 teams registered</span>
+            </div>
+        </div>
+    </div>
+    <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
+        <div class="bg-red-600 text-white px-4 py-3">
+            <h3 class="font-bold">Trivia Night</h3>
+            <p class="text-sm">March 18, 2025 - 7:00 PM</p>
+        </div>
+        <div class="p-4">
+            <p class="text-gray-300 mb-3">Test your knowledge at our trivia night. Various categories including sports, history, and pop culture.</p>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Location: Event Hall</span>
+                <span class="text-blue-400">8 teams registered</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

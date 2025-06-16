@@ -78,7 +78,7 @@ def upload_photo():
             db.session.commit()
 
             flash('Photo successfully uploaded!', 'success')
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('main.dashboard'))
         else:
             flash(f'Invalid file type. Allowed file types are: {", ".join(ALLOWED_EXTENSIONS)}', 'error')
             return redirect(request.url)
@@ -88,7 +88,7 @@ def upload_photo():
 
 
 @photos_bp.route('/photos/gallery', methods=['GET'])
-def photo_gallery():
+def gallery():
     """Display all photos in the current contest"""
 
     # Get all photos, newest first
@@ -118,12 +118,12 @@ def vote(photo_id):
     # Check if the user has already voted for this photo
     existing_vote = PhotoVote.query.filter_by(
         photo_id=photo_id,
-        voter_name=current_user.member_name  # Adjust based on your user model
+        voter_id=current_user.team_member_id  # Adjust based on your user model
     ).first()
 
     if existing_vote:
         flash('You have already voted for this photo', 'error')
-        return redirect(url_for('photos.photo_gallery'))
+        return redirect(url_for('photos.gallery'))
 
     # Check if the user still has votes remaining for this week
     # Define the start of the current week (Monday)
@@ -132,7 +132,7 @@ def vote(photo_id):
 
     # Count votes cast by this user this week
     votes_this_week = PhotoVote.query.filter(
-        PhotoVote.voter_name == current_user.member_name,  # Adjust based on your user model
+        PhotoVote.voter_id == current_user.team_member_id,  # Adjust based on your user model
         func.date(PhotoVote.voted_at) >= start_of_week
     ).count()
 
@@ -141,12 +141,12 @@ def vote(photo_id):
 
     if votes_this_week >= MAX_VOTES_PER_WEEK:
         flash(f'You have used all your {MAX_VOTES_PER_WEEK} votes for this week', 'error')
-        return redirect(url_for('photos.photo_gallery'))
+        return redirect(url_for('photos.gallery'))
 
     # Create a new vote
     new_vote = PhotoVote(
         photo_id=photo_id,
-        voter_name=current_user.member_name,  # Adjust based on your user model
+        voter_id=current_user.team_member_id,  # Adjust based on your user model
         voted_at=datetime.now()
     )
 
@@ -154,7 +154,7 @@ def vote(photo_id):
     db.session.commit()
 
     flash('Vote recorded successfully!', 'success')
-    return redirect(url_for('photos.photo_gallery'))
+    return redirect(url_for('photos.gallery'))
 
 
 # Helper function to check if a user has voted for a specific photo
@@ -165,7 +165,7 @@ def user_has_voted_for(photo_id):
 
     existing_vote = PhotoVote.query.filter_by(
         photo_id=photo_id,
-        voter_name=current_user.member_name  # Adjust based on your user model
+        voter_id=current_user.team_member_id
     ).first()
 
     return existing_vote is not None
@@ -178,17 +178,16 @@ def get_votes_remaining():
         return 0
 
     # Define the start of the current week (Monday)
-    today = datetime.now().date()
-    start_of_week = today - timedelta(days=today.weekday())
+    # today = datetime.now().date()
+    # start_of_week = today - timedelta(days=today.weekday())
 
     # Count votes cast by this user this week
     votes_this_week = PhotoVote.query.filter(
-        PhotoVote.voter_id == current_user.team_member_id,
-        func.date(PhotoVote.voted_at) >= start_of_week
+        PhotoVote.voter_id == current_user.team_member_id
     ).count()
 
     # Set max votes per week
-    MAX_VOTES_PER_WEEK = 3
+    MAX_VOTES_PER_WEEK = 5
 
     return max(0, MAX_VOTES_PER_WEEK - votes_this_week)
 
