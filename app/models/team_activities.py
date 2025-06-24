@@ -2,6 +2,7 @@
 from datetime import datetime
 from . import db
 
+
 class TeamActivity(db.Model):
     """Team activity model for tracking team participation in activities."""
     

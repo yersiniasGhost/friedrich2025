@@ -19,6 +19,7 @@ def index():
     # Otherwise show the regular home page
     return render_template('main/index.html')
 
+
 @main.route('/dashboard')
 @login_required
 def dashboard():
@@ -52,6 +53,7 @@ def dashboard():
 def calendar():
     """Calendar page."""
     return render_template('main/calendar.html')
+
 
 @main.route('/leaderboard')
 @login_required

@@ -82,13 +82,15 @@
                     </td>
                     <td class="px-6 py-4">
                         <div class="text-sm text-white">
-                            Base: {{ activity.participation_points }}
+                            Participation: {{ activity.participation_points }}
                         </div>
+                        {% if activity.has_place_points %}
                         <div class="text-xs text-gray-400">
                             1st: +{{ activity.first_place_points }} •
                             2nd: +{{ activity.second_place_points }} •
                             3rd: +{{ activity.third_place_points }}
                         </div>
+                        {% endif %}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         {% if activity.activity_id in participation %}
